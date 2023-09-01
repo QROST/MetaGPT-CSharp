@@ -10,8 +10,8 @@ from metagpt.logs import logger
 
 PROMPT = """You are an AI developer, trying to write a program that generates code for users based on their intentions.
 When given their intentions, provide a complete and exhaustive list of file paths needed to write the program for the user.
-Only list the file paths you will write and return them as a Python string list.
-Do not add any other explanations, just return a Python string list."""
+Only list the file paths you will write and return them as a python string list.
+Do not add any other explanations, just return a python string list."""
 
 
 class DesignFilenames(Action):

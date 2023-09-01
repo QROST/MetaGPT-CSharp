@@ -34,7 +34,7 @@ ATTENTION: Use '##' to SPLIT SECTIONS, not '#'. Output format carefully referenc
 ## Format example
 -----
 ## Code: {filename}
-```python
+```csharp
 ## {filename}
 ...
 ```
@@ -56,10 +56,9 @@ class WriteCode(Action):
             return
 
         design = [i for i in context if i.cause_by == WriteDesign][0]
-
-        ws_name = CodeParser.parse_str(block="Python package name", text=design.content)
+        ws_name = CodeParser.parse_str(block="C# Namespace name", text=design.content)
         ws_path = WORKSPACE_ROOT / ws_name
-        if f"{ws_name}/" not in filename and all(i not in filename for i in ["requirements.txt", ".md"]):
+        if f"{ws_name}/" not in filename and all(i not in filename for i in ["csproj", ".md"]):
             ws_path = ws_path / ws_name
         code_path = ws_path / filename
         code_path.parent.mkdir(parents=True, exist_ok=True)

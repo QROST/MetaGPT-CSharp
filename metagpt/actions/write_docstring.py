@@ -150,7 +150,74 @@ _python_docstring_style = {
 }
 
 
-class WriteDocstring(Action):
+CSHARP_XML_SYSTEM = '''### Requirements
+1. Add XML comment to the given code following the {style} style.
+2. Replace the function body with an Ellipsis object(...) to reduce output.
+3. If the types are already annotated, there is no need to include them in the docstring.
+4. Extract only class, function or the XML comments for the module parts from the given C# code, avoiding any other text.
+
+### Input Example
+```csharp
+class GenericClass<T>
+{
+    // Fields and members.
+}
+public class ParamsAndParamRefs
+{
+    public static T GetGenericValue<T>(T para)
+    {
+        return para;
+    }
+}
+```
+
+### Output Example
+```csharp
+{example}
+```
+'''
+
+CSHARP_XML_EXAMPLE_MS = '''
+/// <summary>
+/// This is a generic class.
+/// </summary>
+/// <remarks>
+/// This example shows how to specify the <see cref="GenericClass{T}"/>
+/// type as a cref attribute.
+/// In generic classes and methods, you'll often want to reference the
+/// generic type, or the type parameter.
+/// </remarks>
+class GenericClass<T>
+{
+    // Fields and members.
+}
+
+/// <Summary>
+/// This shows examples of typeparamref and typeparam tags
+/// </Summary>
+public class ParamsAndParamRefs
+{
+    /// <summary>
+    /// The GetGenericValue method.
+    /// </summary>
+    /// <remarks>
+    /// This sample shows how to specify the <see cref="GetGenericValue"/>
+    /// method as a cref attribute.
+    /// The parameter and return value are both of an arbitrary type,
+    /// <typeparamref name="T"/>
+    /// </remarks>
+    public static T GetGenericValue<T>(T para)
+    {
+        return para;
+    }
+}
+'''
+
+_csharp_xml_style = {
+    "ms": CSHARP_XML_EXAMPLE_MS.strip(),
+}
+
+class WriteXMLComment(Action):
     """This class is used to write docstrings for code.
 
     Attributes:
@@ -163,22 +230,22 @@ class WriteDocstring(Action):
 
     async def run(
         self, code: str,
-        system_text: str = PYTHON_DOCSTRING_SYSTEM,
+        system_text: str = CSHARP_XML_SYSTEM,
         style: Literal["google", "numpy", "sphinx"] = "google",
     ) -> str:
-        """Writes docstrings for the given code and system text in the specified style.
+        """Writes XML comment for the given code and system text in the specified style.
 
         Args:
-            code: A string of Python code.
+            code: A string of C# code.
             system_text: A string of system text.
             style: A string specifying the style of the docstring. Can be 'google', 'numpy', or 'sphinx'.
 
         Returns:
-            The Python code with docstrings added.
+            The C# code with docstrings added.
         """
-        system_text = system_text.format(style=style, example=_python_docstring_style[style])
-        simplified_code = _simplify_python_code(code)
-        documented_code = await self._aask(f"```python\n{simplified_code}\n```", [system_text])
+        system_text = system_text.format(style=style, example=_csharp_xml_style[style])
+        #simplified_code = _simplify_python_code(code)
+        documented_code = await self._aask(f"```csharp\n{code}\n```", [system_text])
         documented_code = OutputParser.parse_python_code(documented_code)
         return merge_docstring(code, documented_code)
 
@@ -205,7 +272,7 @@ if __name__ == "__main__":
     async def run(filename: str, overwrite: bool = False, style: Literal["google", "numpy", "sphinx"] = "google"):
         with open(filename) as f:
             code = f.read()
-        code = await WriteDocstring().run(code, style=style)
+        code = await WriteXMLComment().run(code, style=style)
         if overwrite:
             with open(filename, "w") as f:
                 f.write(code)

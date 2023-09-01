@@ -19,8 +19,8 @@ The API is: {prompt}
 We decide the generated files are: {filepaths_string}
 
 Now that we have a file list, we need to understand the shared dependencies they have.
-Please list and briefly describe the shared contents between the files we are generating, including exported variables, 
-data patterns, id names of all DOM elements that javascript functions will use, message names and function names.
+Please list and briefly describe the shared contents between the files we are generating, including exported classes, 
+namespaces, data structures, IDs of all UI elements that the C# code will use, event names, and method names.
 Focus only on the names of shared dependencies, do not add any other explanations.
 """
 

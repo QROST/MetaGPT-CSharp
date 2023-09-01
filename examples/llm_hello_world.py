@@ -16,7 +16,7 @@ async def main():
     claude = Claude()
     logger.info(await claude.aask('你好，请进行自我介绍'))
     logger.info(await llm.aask('hello world'))
-    logger.info(await llm.aask_batch(['hi', 'write python hello world.']))
+    logger.info(await llm.aask_batch(['hi', 'write c# hello world.']))
 
     hello_msg = [{'role': 'user', 'content': 'count from 1 to 10. split by newline.'}]
     logger.info(await llm.acompletion(hello_msg))

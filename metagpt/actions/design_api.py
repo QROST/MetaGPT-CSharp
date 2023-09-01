@@ -22,20 +22,20 @@ PROMPT_TEMPLATE = """
 ## Format example
 {format_example}
 -----
-Role: You are an architect; the goal is to design a SOTA PEP8-compliant python system; make the best use of good open source tools
-Requirement: Fill in the following missing information based on the context, note that all sections are response with code form separately
+Role: You are an architect; the goal is to design a SOTA C# .NET-compliant system; make the best use of good open-source tools
+Requirement: Fill in the following missing information based on the context, note that all sections are to be responded to in code form separately
 Max Output: 8192 chars or 2048 tokens. Try to use them up.
-Attention: Use '##' to split sections, not '#', and '## <SECTION_NAME>' SHOULD WRITE BEFORE the code and triple quote.
+Attention: Use '##' to split sections, not '#', and '## <SECTION_NAME>' SHOULD BE WRITTEN BEFORE the code and enclosed in triple quotes.
 
 ## Implementation approach: Provide as Plain text. Analyze the difficult points of the requirements, select the appropriate open-source framework.
 
-## Python package name: Provide as Python str with python triple quoto, concise and clear, characters only use a combination of all lowercase and underscores
+## C# Namespace name: Provide as a C# string with C# triple quote, concise and clear, follow C# naming conventions
 
-## File list: Provided as Python list[str], the list of ONLY REQUIRED files needed to write the program(LESS IS MORE!). Only need relative paths, comply with PEP8 standards. ALWAYS write a main.py or app.py here
+## File list: Provided as a Python list[str], the list of ONLY REQUIRED files needed to write the program (LESS IS MORE!). Only need relative paths, comply with C# standards. ALWAYS write a Program.cs here
 
-## Data structures and interface definitions: Use mermaid classDiagram code syntax, including classes (INCLUDING __init__ method) and functions (with type annotations), CLEARLY MARK the RELATIONSHIPS between classes, and comply with PEP8 standards. The data structures SHOULD BE VERY DETAILED and the API should be comprehensive with a complete design. 
+## Data Structures and Interface Definitions: Use mermaid classDiagram code syntax, including classes (INCLUDING constructors) and methods (with type declarations). CLEARLY MARK the RELATIONSHIPS between classes. The data structures SHOULD BE VERY DETAILED and the API should be comprehensive with a complete design.
 
-## Program call flow: Use sequenceDiagram code syntax, COMPLETE and VERY DETAILED, using CLASSES AND API DEFINED ABOVE accurately, covering the CRUD AND INIT of each object, SYNTAX MUST BE CORRECT.
+## Program Call Flow: Use sequenceDiagram code syntax, COMPLETE and VERY DETAILED, using CLASSES AND API DEFINED ABOVE accurately, covering the CREATE, READ, UPDATE, DELETE (CRUD) AND INITIALIZATION of each object. SYNTAX MUST BE CORRECT.
 
 ## Anything UNCLEAR: Provide as Plain text. Make clear here.
 
@@ -45,15 +45,16 @@ FORMAT_EXAMPLE = """
 ## Implementation approach
 We will ...
 
-## Python package name
-```python
-"snake_game"
+## C# Namespace name
+```csharp
+"DotNetSnakeGameApp"
 ```
 
 ## File list
 ```python
 [
-    "main.py",
+    "Program.cs",
+    "Startup.cs"
 ]
 ```
 
@@ -76,12 +77,12 @@ sequenceDiagram
 ```
 
 ## Anything UNCLEAR
-The requirement is clear to me.
+The requirements are clear.
 ---
 """
 OUTPUT_MAPPING = {
     "Implementation approach": (str, ...),
-    "Python package name": (str, ...),
+    "C# Namespace name": (str, ...),
     "File list": (List[str], ...),
     "Data structures and interface definitions": (str, ...),
     "Program call flow": (str, ...),
@@ -122,10 +123,10 @@ class WriteDesign(Action):
     def _save(self, context, system_design):
         if isinstance(system_design, ActionOutput):
             content = system_design.content
-            ws_name = CodeParser.parse_str(block="Python package name", text=content)
+            ws_name = CodeParser.parse_str(block="C# Namespace name", text=content)
         else:
             content = system_design
-            ws_name = CodeParser.parse_str(block="Python package name", text=system_design)
+            ws_name = CodeParser.parse_str(block="C# Namespace name", text=system_design)
         workspace = WORKSPACE_ROOT / ws_name
         self.recreate_workspace(workspace)
         docs_path = workspace / 'docs'

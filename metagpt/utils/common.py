@@ -97,6 +97,24 @@ class OutputParser:
                 return code
         raise ValueError("Invalid python code")
 
+
+    @staticmethod
+    def parse_pcsharp_code(text: str) -> str:
+        for pattern in (
+            r'(.*?```csharp.*?\s+)?(?P<code>.*)(```.*?)', 
+            r'(.*?```csharp.*?\s+)?(?P<code>.*)', 
+        ):
+            match = re.search(pattern, text, re.DOTALL)
+            if not match:
+                continue
+            code = match.group("code")
+            if not code:
+                continue
+            with contextlib.suppress(Exception):
+                ast.parse(code)
+                return code
+        raise ValueError("Invalid csharp code")
+
     @classmethod
     def parse_data(cls, data):
         block_dict = cls.parse_blocks(data)

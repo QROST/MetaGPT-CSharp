@@ -1,6 +1,6 @@
 import pytest
 
-from metagpt.actions.write_docstring import WriteDocstring
+from metagpt.actions.write_docstring import WriteXMLComment
 
 code = '''
 def add_numbers(a: int, b: int):
@@ -28,5 +28,5 @@ class Person:
     ids=["google", "numpy", "sphinx"]
 )
 async def test_write_docstring(style: str, part: str):
-    ret = await WriteDocstring().run(code, style=style)
+    ret = await WriteXMLComment().run(code, style=style)
     assert part in ret

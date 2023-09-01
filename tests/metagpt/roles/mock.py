@@ -71,7 +71,7 @@ PRD = '''## 原始需求
 ```
 '''
 
-SYSTEM_DESIGN = '''## Python package name
+SYSTEM_DESIGN = '''## C# Namespace name
 ```python
 "smart_search_engine"
 ```
